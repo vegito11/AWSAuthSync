@@ -1,0 +1,15 @@
+FROM golang:1.18-alpine
+
+ARG repo="${GOPATH}/src/github.com/vegito11/AWSAuthSync"
+
+RUN apk update && apk add bash wget git
+
+ENV GO111MODULE=off
+
+RUN go get k8s.io/code-generator \
+    && go get k8s.io/apimachinery \
+    && mkdir -p $repo \
+    && cd $GOPATH/src/k8s.io \
+    && rm -rf code-generator && git clone --depth 1 -b release-1.24 https://github.com/kubernetes/code-generator.git
+
+WORKDIR $GOPATH/src/k8s.io/code-generator

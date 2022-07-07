@@ -1,0 +1,18 @@
+apiVersion: vegito11.io/v1beta
+kind: AWSAuthMap
+metadata:
+  name: devauth
+  labels:
+    authgroup: dev
+spec:
+  rolesmap:
+    - groups:
+      - devs
+      rolearn: aws::/role/testrole
+      username: vegito
+  usersmap:
+    - groups: 
+      - devops
+      userarn: aws::/user/devops
+      username: devops
+
