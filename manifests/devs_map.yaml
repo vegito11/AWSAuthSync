@@ -15,4 +15,3 @@ spec:
       - devops
       userarn: aws::/user/devops
       username: devops
-

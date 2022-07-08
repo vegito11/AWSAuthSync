@@ -23,7 +23,7 @@ IMAGE_NAME="kubernetes-codegen:latest"
 CUSTOM_RESOURCE_GRP_NAME="vegito11.io"
 CUSTOM_RESOURCE_VERSION="v1beta"
 
-echo "Building codegen Docker image..."
+echo " 1) Building codegen Docker image..."
 # docker build -f "hacks/Dockerfile.generator" -t "${IMAGE_NAME}" .
 
 cmd="./generate-groups.sh all \
@@ -31,14 +31,14 @@ cmd="./generate-groups.sh all \
     "$PROJECT_MODULE/pkg/apis" \
     $CUSTOM_RESOURCE_GRP_NAME:$CUSTOM_RESOURCE_VERSION --go-header-file hack/boilerplate.go.txt"
 
-echo "Generating client codes..."
+echo " 2) Generating client codes..."
 
 format_cygwin_path $(pwd)
 echo " Debugging - docker run --rm -it -v ${CYG_FMT_PATH}:/go/src/${PROJECT_MODULE} ${IMAGE_NAME} sh "
 
 docker run --rm -v "${CYG_FMT_PATH}:/go/src/${PROJECT_MODULE}" "${IMAGE_NAME}" $cmd
 
-echo "Generating CRD manifests ${PROJECT_MODULE}/pkg/apis/${CUSTOM_RESOURCE_GRP_NAME}/${CUSTOM_RESOURCE_VERSION}"
+echo " 3) Generating CRD manifests ${PROJECT_MODULE}/pkg/apis/${CUSTOM_RESOURCE_GRP_NAME}/${CUSTOM_RESOURCE_VERSION}"
 
 crd_cmd="
 ./controller-gen paths=${PROJECT_MODULE}/pkg/apis/${CUSTOM_RESOURCE_GRP_NAME}/${CUSTOM_RESOURCE_VERSION} \

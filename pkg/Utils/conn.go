@@ -17,7 +17,7 @@ func GetKubeConn(kubeconfig_path *string) (*crclient.Clientset, *kubernetes.Clie
 		fmt.Printf(" Error %s building from flags \n", err.Error())
 		config, err = rest.InClusterConfig()
 		if err != nil {
-			fmt.Printf(" Error %s getting cluster config \n", err.Error())
+			fmt.Printf(" Error %s getting cluster config from pod secret mount \n", err.Error())
 		}
 	}
 

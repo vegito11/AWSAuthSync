@@ -39,20 +39,29 @@ func (c *Controller) processItem() bool {
 		obj := currentAuthMap.(*v1beta.AWSAuthMap)
 
 		delErr := c.deleteAuthEntries(*obj)
-		if delErr != nil {
-			return false
-		}
-		return true
+
+		return delErr == nil
 
 	} else if authmap.Name != "" { /* ===== 1) Process update/add event  */
+		addErr := c.addAuthEntries(*authmap)
 
-		obj := currentAuthMap.(*v1beta.AWSAuthMap)
-		addErr := c.addAuthEntries(*obj)
-		if addErr != nil {
-			return false
-		}
-		return true
+		return addErr == nil
+		// c.updateStatus(ns, name)
 	}
 
 	return true
 }
+
+/* func (c *Controller) updateStatus(ns, name string) {
+	authMap, _ := c.crClient.Vegito11V1beta().AWSAuthMaps(ns).Get(context.Background(), name, metav1.GetOptions{})
+	authCopy := authMap.DeepCopy()
+	if authMap.Status.State == "" {
+		authCopy.Status.State = "Created"
+	} else if authMap.Status.State == "Created" {
+		authCopy.Status.State = "Updated"
+	} else {
+		return
+	}
+	c.crClient.Vegito11V1beta().AWSAuthMaps(ns).UpdateStatus(context.TODO(), authCopy, metav1.UpdateOptions{})
+
+} */

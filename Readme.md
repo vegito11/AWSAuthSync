@@ -24,9 +24,19 @@ kubectl apply -f manifests/aws-auth-cm.yaml
 kubectl get AWSAuthMap
 kg cm aws-auth-test -n kube-system -o yaml
 ```
+### 4) Role Binding 
+```bash
+kubectl --dry-run=client -o yaml create clusterrole auth-cr --resource awth --verb get,list,watch
+kubectl --dry-run=client -o yaml create clusterrolebinding auth-cr --clusterrole auth-cr --serviceaccount default:authsa
+```
 
+### 5) create new image
+```bash
+docker build -t vegito/awsauthsyncer:0.0.1 .
+```
 
 ## Referense
 
 - [code generartor](https://github.com/kubernetes/code-generator/blob/master/examples/crd/apis/example/v1register.go)
 - [Sample Controller](https://github.com/kubernetes/sample-controller)
+- [Kube Builder Tags for Auto Generation](https://book.kubebuilder.io/reference/markers/crd.html)

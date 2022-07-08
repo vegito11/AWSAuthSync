@@ -102,6 +102,18 @@ func (c *FakeAWSAuthMaps) Update(ctx context.Context, aWSAuthMap *v1beta.AWSAuth
 	return obj.(*v1beta.AWSAuthMap), err
 }
 
+// UpdateStatus was generated because the type contains a Status member.
+// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+func (c *FakeAWSAuthMaps) UpdateStatus(ctx context.Context, aWSAuthMap *v1beta.AWSAuthMap, opts v1.UpdateOptions) (*v1beta.AWSAuthMap, error) {
+	obj, err := c.Fake.
+		Invokes(testing.NewUpdateSubresourceAction(awsauthmapsResource, "status", c.ns, aWSAuthMap), &v1beta.AWSAuthMap{})
+
+	if obj == nil {
+		return nil, err
+	}
+	return obj.(*v1beta.AWSAuthMap), err
+}
+
 // Delete takes name of the aWSAuthMap and deletes it. Returns an error if one occurs.
 func (c *FakeAWSAuthMaps) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.

@@ -12,7 +12,7 @@ WORKDIR /app
 # To avoid downloading depedencies every time we build image.
 # we are caching all dependencies by copying go.mod and go.sum
 # So if there is no change no dependencies layer won't be changed
-COPY go mod ./
+COPY go.mod ./
 COPY go.sum ./
 
 # Download all dependencies
@@ -22,13 +22,15 @@ RUN go mod download
 COPY . .
 
 # CGO_ENABLED disabled for cross system compilation
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/aws_auth_syncer .
+RUN CGO_ENABLED=0 GO111MODULE=on GOOS=linux GOARCH=amd64 \
+    go build -o ./bin/aws_auth_syncer -buildvcs=false .
 
 ## Start new build from scratch and use binary from last stage
-FROM scratch .
+FROM alpine
 
+RUN apk update && apk add bash
 COPY --from=builder /app/bin/aws_auth_syncer app/aws_auth_syncer
 
-EXPOSE 8080
+EXPOSE 80
 
 CMD [/app/aws_auth_syncer]

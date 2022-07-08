@@ -5,6 +5,7 @@ import (
 
 	"github.com/vegito11/AWSAuthSync/pkg/apis/vegito11.io/v1beta"
 	"gopkg.in/yaml.v2"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/client-go/tools/cache"
@@ -92,6 +93,7 @@ func (c *Controller) deleteAuthEntries(delobj v1beta.AWSAuthMap) error {
 		klog.Error(" Error while updating configmap :", upErr.Error())
 		return upErr
 	}
+	c.recorder.Event(&delobj, corev1.EventTypeNormal, "AwsAuthSync", "Successfully Removed Enytries from aws-auth")
 
 	return nil
 }
@@ -102,8 +104,10 @@ func (c *Controller) addAuthEntries(addobj v1beta.AWSAuthMap) error {
 	existingUsers, existingRoles, getErr := c.getExistingMap()
 
 	if getErr != nil {
+		c.recorder.Event(&addobj, corev1.EventTypeWarning, "AwsAuthGetter", getErr.Error())
 		return getErr
 	}
+	c.recorder.Event(&addobj, corev1.EventTypeNormal, "AwsAuthGetter", "Successfully Got Existing Map Data")
 
 	for _, addusr := range addobj.Spec.MapUsers {
 		flg := true
@@ -146,6 +150,7 @@ func (c *Controller) addAuthEntries(addobj v1beta.AWSAuthMap) error {
 		return upErr
 	}
 
+	c.recorder.Event(&addobj, corev1.EventTypeNormal, "AwsAuthSync", "Successfully Added new Enytries into aws-auth")
 	return nil
 
 }

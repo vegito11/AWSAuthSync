@@ -13,10 +13,26 @@ spec:
     kind: AWSAuthMap
     listKind: AWSAuthMapList
     plural: awsauthmaps
+    shortNames:
+    - awth
     singular: awsauthmap
   scope: Namespaced
   versions:
-  - name: v1beta
+  - additionalPrinterColumns:
+    - jsonPath: .spec.rolesmap[*].rolearn
+      name: Role
+      type: string
+    - jsonPath: .spec.usersmap[*].userarn
+      name: User
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - jsonPath: .spec.usersmap
+      name: AllUser
+      priority: 1
+      type: string
+    name: v1beta
     schema:
       openAPIV3Schema:
         description: Our Custom Object structure
@@ -69,15 +85,19 @@ spec:
                   - username
                   type: object
                 type: array
-            required:
-            - rolesmap
-            - usersmap
+            type: object
+          status:
+            properties:
+              state:
+                type: string
             type: object
         required:
         - spec
         type: object
     served: true
     storage: true
+    subresources:
+      status: {}
 status:
   acceptedNames:
     kind: ""

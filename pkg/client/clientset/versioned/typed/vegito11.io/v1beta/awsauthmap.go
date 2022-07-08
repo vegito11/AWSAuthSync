@@ -40,6 +40,7 @@ type AWSAuthMapsGetter interface {
 type AWSAuthMapInterface interface {
 	Create(ctx context.Context, aWSAuthMap *v1beta.AWSAuthMap, opts v1.CreateOptions) (*v1beta.AWSAuthMap, error)
 	Update(ctx context.Context, aWSAuthMap *v1beta.AWSAuthMap, opts v1.UpdateOptions) (*v1beta.AWSAuthMap, error)
+	UpdateStatus(ctx context.Context, aWSAuthMap *v1beta.AWSAuthMap, opts v1.UpdateOptions) (*v1beta.AWSAuthMap, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
 	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1beta.AWSAuthMap, error)
@@ -128,6 +129,22 @@ func (c *aWSAuthMaps) Update(ctx context.Context, aWSAuthMap *v1beta.AWSAuthMap,
 		Namespace(c.ns).
 		Resource("awsauthmaps").
 		Name(aWSAuthMap.Name).
+		VersionedParams(&opts, scheme.ParameterCodec).
+		Body(aWSAuthMap).
+		Do(ctx).
+		Into(result)
+	return
+}
+
+// UpdateStatus was generated because the type contains a Status member.
+// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+func (c *aWSAuthMaps) UpdateStatus(ctx context.Context, aWSAuthMap *v1beta.AWSAuthMap, opts v1.UpdateOptions) (result *v1beta.AWSAuthMap, err error) {
+	result = &v1beta.AWSAuthMap{}
+	err = c.client.Put().
+		Namespace(c.ns).
+		Resource("awsauthmaps").
+		Name(aWSAuthMap.Name).
+		SubResource("status").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(aWSAuthMap).
 		Do(ctx).
