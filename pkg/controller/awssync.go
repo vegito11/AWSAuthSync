@@ -53,15 +53,15 @@ func NewController(kubeClient kubernetes.Interface, crClient crclntset.Interface
 	crInformer.Informer().AddEventHandler(
 		cache.ResourceEventHandlerFuncs{
 			AddFunc: func(new interface{}) {
-				klog.Info(" New AWSAuthMap has been added to the cluster")
+				klog.Info(" New AWSAuthMap has been added to the cluster 📥")
 				ctr.enqueueCR(new)
 			},
 			UpdateFunc: func(old, new interface{}) {
-				klog.Info(" AWSAuthMap has been updated")
+				klog.Info(" AWSAuthMap has been updated 🔩 ")
 				ctr.enqueueCR(new)
 			},
 			DeleteFunc: func(new interface{}) {
-				klog.Info(" AWSAuthMap has been Deleted from the cluster")
+				klog.Info(" AWSAuthMap has been Deleted from the cluster ❌")
 				ctr.enqueueCR(new)
 			},
 		},

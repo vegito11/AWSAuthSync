@@ -24,7 +24,7 @@ CUSTOM_RESOURCE_GRP_NAME="vegito11.io"
 CUSTOM_RESOURCE_VERSION="v1beta"
 
 echo " 1) Building codegen Docker image..."
-# docker build -f "hacks/Dockerfile.generator" -t "${IMAGE_NAME}" .
+docker build -f "hacks/Dockerfile.generator" -t "${IMAGE_NAME}" .
 
 cmd="./generate-groups.sh all \
     "$PROJECT_MODULE/pkg/client" \
