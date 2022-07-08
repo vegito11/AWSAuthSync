@@ -1,0 +1,20 @@
+apiVersion: vegito11.io/v1beta
+kind: AWSAuthMap
+metadata:
+  name: qaauth
+  labels:
+    authgroup: dev
+spec:
+  rolesmap:
+    - groups:
+      - qa
+      rolearn: aws::/role/qarole
+      username: qa
+    - groups:
+      - testing
+      rolearn: aws::/role/testingrole
+      username: testing
+    - groups:
+      - fdf
+      rolearn: aws::/role/fdfgrole
+      username: fdf

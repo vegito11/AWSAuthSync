@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  creationTimestamp: null
+  name: authsa
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: auth-cr
+rules:
+- apiGroups:
+  - vegito11.io
+  - ""
+  resources:
+  - awsauthmaps
+  - events
+  verbs:
+  - create
+  - patch
+  - update
+  - get
+  - list
+  - watch 
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  creationTimestamp: null
+  name: awsauth
+  namespace: kube-system
+rules:
+- apiGroups:
+  - ""
+  resourceNames:
+  - aws-auth-test
+  resources:
+  - configmaps
+  verbs:
+  - update
+  - patch
+  - get  

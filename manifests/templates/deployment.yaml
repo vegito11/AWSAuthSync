@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: authsync
+    dept: controller
+    role: auth-manager
+  name: authsync
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authsync
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: authsync
+    spec:
+      containers:
+      - image: vegito/awsauthsyncer:0.0.1
+        name: awsauthsyncer
+        imagePullPolicy: Always
+        command: ["bin/bash", "-c"]
+        args:
+          - /app/aws_auth_syncer
+        resources: {}
+      serviceAccountName: authsa
+status: {}
