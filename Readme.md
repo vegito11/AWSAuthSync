@@ -1,7 +1,7 @@
 ## Info 
-- This operator is used to update the aws-auth configmap so that we can easily manage it without manually updating it . 
-- We need to create our AWSAuthMap CR object . The controller will watch this objects and add/remove the mapRoles and mapUsers entry from aws-auth configmap
+- Using this operator, we can effectively maintain the aws-auth configmap without having to manually update it.
 
+- After creation of  AWSAuthMap (CR) object. According to the entries specified in our AWSAuthMap Object, our controller will update the aws-auth configmap.
 
 ## How to Run Code
 
@@ -32,7 +32,7 @@ kg cm aws-auth-test -n kube-system -o yaml
 
 ### 4) To deploy controller on k8s cluster.    
 
-1. create docker image and push it . (update the image repo accordingly). 
+1. create docker image and push it (update the image repo accordingly). 
    
     ```bash 
     docker build -t vegito/awsauthsyncer:0.0.1 . 
@@ -104,6 +104,10 @@ qaauth    aws::/role/qarole                         52m
 1. Whenever an existing CR object is updated. The aws-auth map will retain any entries that are deleted from our CR object.
 
 2. Because it hasn't been thoroughly tested and was created only for learning purposes, we should implement it in production right now.
+
+3. We can have admission webhook which can verify the Userarn/Rolearn , So that we can prevent the common typos from happening
+
+4. We can have the Mutating webhook to set the username/group by parsing Userarn/Rolearn
 
 ## Referense
 
